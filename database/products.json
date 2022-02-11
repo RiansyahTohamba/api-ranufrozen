@@ -1,0 +1,12 @@
+[{
+    "name" : "Nugget Asam Manis",
+    "price" : 30000.0,
+    "priceStr" : "Rp 30.000",
+    "photoPath" : "breakfast_item.jpg",
+    "stock" : 4,
+    "rating": 4,
+    "isSuperSeller": 1,
+    "expiredPromo": "10-10-2022",
+    "category": 2,
+    "desc" : "Rasa asam manis nya bikin nyam nyam"
+}]
