@@ -3,8 +3,9 @@ package food
 import "gorm.io/gorm"
 
 type Repository interface {
+	FindById(id int) *Food
+
 	FindAll() ([]Food, error)
-	FindByID(ID int) (Food, error)
 	Create(food Food) (Food, error)
 }
 
@@ -20,12 +21,6 @@ func (r *repository) FindAll() ([]Food, error) {
 	var foods []Food
 	err := r.db.Find(&foods).Error
 	return foods, err
-}
-
-func (r *repository) FindByID(ID int) (Food, error) {
-	var food Food
-	err := r.db.Find(&food, ID).Error
-	return food, err
 }
 
 func (r *repository) Create(food Food) (Food, error) {
