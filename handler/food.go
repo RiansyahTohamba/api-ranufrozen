@@ -2,6 +2,7 @@ package handler
 
 import (
 	"api-ranufrozen/food"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -46,15 +47,37 @@ func RootHandler(c *gin.Context) {
 	})
 }
 
-// func FoodHandler(c *gin.Context) {
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"name":    "Ranufrozen",
-// 		"tagline": "makan enak untuk semua!",
-// 	})
-// }
+// kalau c.Query() untuk apa?
+func FoodHandler(c *gin.Context) {
+	name := c.Query("name")
+	price := c.Query("price")
+	c.JSON(http.StatusOK, gin.H{
+		"name":  name,
+		"price": price,
+	})
+}
+
+// example query handler
+// base_url/foods?id=12
+func Show(c *gin.Context) {
+	id := c.Param("id")
+
+	c.JSON(http.StatusOK, gin.H{
+		"id": id,
+	})
+}
 
 func PostFoodHandler(c *gin.Context) {
-	// var foodRepo food.Repository
-	// Create
+	var foodInput food.FoodInput
+	err := c.ShouldBindJSON(&foodInput)
 
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"name":       foodInput.Name,
+		"photo_path": foodInput.PhotoPath,
+		"price":      foodInput.Price,
+	})
 }

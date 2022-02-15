@@ -2,7 +2,6 @@ package main
 
 import (
 	"api-ranufrozen/handler"
-	"fmt"
 	"log"
 	"os"
 
@@ -30,7 +29,8 @@ func main() {
 	if err != nil {
 		log.Fatal("DB connect error")
 	}
-	fmt.Println("DB connection succeed")
+
+	// db.AutoMigrate(&food.Food{})
 
 	router := gin.Default()
 
@@ -40,6 +40,8 @@ func main() {
 	// err = db.Debug().where
 	// router := gin.Default()
 	v1.GET("/", handler.RootHandler)
+	v1.GET("/food/:id", handler.Show)
+	// v1.POST("/foods", handler.PostFoodsHandler)
 
 	router.Run()
 }

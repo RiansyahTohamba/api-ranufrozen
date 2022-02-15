@@ -1,13 +1,23 @@
 package food
 
-import "time"
+import (
+	"time"
+)
 
 type Food struct {
-	ID          int
-	Name        string
+	ID            int
+	Name          string
+	PhotoPath     string
+	Rating        int
+	Price         float64
+	Stock         int
+	IsSuperSeller int8
+	Category      int
+	QuantitySold  int
+
 	Description string
-	Price       float64
-	Rating      int
-	CreatedAt   time.Time
-	UpdateAt    time.Time
+	Discount    float32
+
+	CreatedAt time.Time
+	UpdateAt  time.Time
 }
