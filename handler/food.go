@@ -46,10 +46,6 @@ func RootHandler(c *gin.Context) {
 	})
 }
 
-func HelloWorld(name string) string {
-	return ("Hello " + name)
-}
-
 // func FoodHandler(c *gin.Context) {
 // 	c.JSON(http.StatusOK, gin.H{
 // 		"name":    "Ranufrozen",

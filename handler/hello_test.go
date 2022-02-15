@@ -7,21 +7,29 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMain(m *testing.M) {
+func TestHelloMain(m *testing.M) {
 	fmt.Println("Before Test")
 	m.Run()
 	fmt.Println("After Test")
 }
 
 func TestHelloWorldTable(t *testing.T) {
+	// tipe data struct array?
 	tests := []struct {
 		name     string
 		request  string
 		expected string
 	}{
-		name:     "HelloWorld(bio)",
-		request:  "bio",
-		expected: "Hello bio",
+		{
+			name:     "HelloWorld(bio)",
+			request:  "bio",
+			expected: "Hello bio",
+		},
+		{
+			name:     "HelloWorld(brad)",
+			request:  "brad",
+			expected: "Hello brad",
+		},
 	}
 
 	for _, test := range tests {
@@ -36,9 +44,13 @@ func TestHelloWorld(t *testing.T) {
 	assert.Equal(t, "Hello bio", result, "Result must be 'Hello bio'")
 }
 
-func TestSubTest(t *testing.T) {
+func TestHelloSubTest(t *testing.T) {
 	t.Run("bio", func(t *testing.T) {
 		result := HelloWorld("bio")
 		assert.Equal(t, "Hello bio", result, "result must be 'Hello bio'")
+	})
+	t.Run("brad", func(t *testing.T) {
+		result := HelloWorld("brad")
+		assert.Equal(t, "Hello brad", result, "result must be 'Hello brad'")
 	})
 }
