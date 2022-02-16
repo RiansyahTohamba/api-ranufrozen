@@ -2,10 +2,11 @@ package handler
 
 import (
 	"api-ranufrozen/food"
-	"log"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type foodHandler struct {
@@ -73,7 +74,12 @@ func PostFoodHandler(c *gin.Context) {
 	err := c.ShouldBindJSON(&foodInput)
 
 	if err != nil {
-		log.Fatal(err)
+		for _, e := range err.(validator.ValidationErrors) {
+			errorMsg := fmt.Sprintf("Error on field %s, condition: %s", e.Field(), e.ActualTag())
+			c.JSON(http.StatusBadRequest, errorMsg)
+			return
+		}
+
 	}
 
 	c.JSON(http.StatusOK, gin.H{
