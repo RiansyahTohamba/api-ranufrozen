@@ -47,18 +47,7 @@ func RootHandler(c *gin.Context) {
 	})
 }
 
-// kalau c.Query() untuk apa?
-func FoodHandler(c *gin.Context) {
-	name := c.Query("name")
-	price := c.Query("price")
-	c.JSON(http.StatusOK, gin.H{
-		"name":  name,
-		"price": price,
-	})
-}
-
-// example query handler
-// base_url/foods?id=12
+// Param untuk case base_url/:param
 func Show(c *gin.Context) {
 	id := c.Param("id")
 
@@ -67,8 +56,20 @@ func Show(c *gin.Context) {
 	})
 }
 
+// example case for 'query handler'
+// base_url/foods?id=12
+func OrderBy(c *gin.Context) {
+	field := c.Query("field")
+
+	c.JSON(http.StatusOK, gin.H{
+		"field": field,
+	})
+}
+
+// body
 func PostFoodHandler(c *gin.Context) {
 	var foodInput food.FoodInput
+
 	err := c.ShouldBindJSON(&foodInput)
 
 	if err != nil {
@@ -76,8 +77,7 @@ func PostFoodHandler(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"name":       foodInput.Name,
-		"photo_path": foodInput.PhotoPath,
-		"price":      foodInput.Price,
+		"name":  foodInput.Name,
+		"price": foodInput.Price,
 	})
 }

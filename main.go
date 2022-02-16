@@ -41,7 +41,8 @@ func main() {
 	// router := gin.Default()
 	v1.GET("/", handler.RootHandler)
 	v1.GET("/food/:id", handler.Show)
-	// v1.POST("/foods", handler.PostFoodsHandler)
+	v1.GET("/foods/order_by", handler.OrderBy)
+	v1.POST("/food", handler.PostFoodHandler)
 
 	router.Run()
 }
