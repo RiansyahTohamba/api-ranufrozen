@@ -74,11 +74,16 @@ func PostFoodHandler(c *gin.Context) {
 	err := c.ShouldBindJSON(&foodInput)
 
 	if err != nil {
+		errorMessages := []string{}
 		for _, e := range err.(validator.ValidationErrors) {
 			errorMsg := fmt.Sprintf("Error on field %s, condition: %s", e.Field(), e.ActualTag())
-			c.JSON(http.StatusBadRequest, errorMsg)
-			return
+			errorMessages = append(errorMessages, errorMsg)
 		}
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": errorMessages,
+		})
+		return
 
 	}
 
