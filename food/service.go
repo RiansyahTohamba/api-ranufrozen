@@ -1,12 +1,39 @@
 package food
 
 type Service interface {
+	FindById(id int) (Food, error)
+	FindAll() ([]Food, error)
+	Create(food FoodRequest) (Food, error)
 }
 
 // struct vs interface?
 // type
 type service struct {
 	foodRepo Repository
+}
+
+func NewService(repo Repository) *service {
+	return &service{repo}
+}
+
+func (s *service) FindAll() ([]Food, error) {
+	foods, err := s.foodRepo.FindAll()
+	return foods, err
+}
+
+func (s *service) FindById(id int) (Food, error) {
+	food, err := s.foodRepo.FindById(id)
+	return food, err
+}
+
+func (s *service) Create(foodReq FoodRequest) (Food, error) {
+	price, _ := foodReq.Price.Float64()
+	food := Food{
+		Name:  foodReq.Name,
+		Price: float64(price),
+	}
+	newFood, err := s.foodRepo.Create(food)
+	return newFood, err
 }
 
 // func (service Service) Get(id int) (*Food, error) {
@@ -26,15 +53,4 @@ type service struct {
 // 	}
 // 	return food
 
-// }
-
-// func (service Service) Create() {
-// 	food := Food{}
-// 	food.Name = "Nugget Ayam"
-// 	food.Price = 25000.0
-// 	food.Discount = 5
-// 	food.Rating = 4
-// 	food.Description = "Lezat sekali"
-
-// 	foodSaved, err = foodRepo.Create(food)
 // }

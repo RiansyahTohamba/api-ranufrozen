@@ -5,7 +5,7 @@ import (
 )
 
 type Repository interface {
-	FindById(id int) *Food
+	FindById(id int) (Food, error)
 	FindAll() ([]Food, error)
 	Create(food Food) (Food, error)
 }
@@ -14,15 +14,17 @@ type repository struct {
 	db *gorm.DB
 }
 
+func NewRepository(db *gorm.DB) *repository {
+	return &repository{db}
+}
+
+// function milik struct 'repository'
+// diawali (r *repository)
 func (r *repository) FindById(id int) (Food, error) {
 	var food Food
 	// hasil disimpan di adress food
 	err := r.db.First(&food).Error
 	return food, err
-}
-
-func NewRepository(db *gorm.DB) *repository {
-	return &repository{db}
 }
 
 func (r *repository) FindAll() ([]Food, error) {
