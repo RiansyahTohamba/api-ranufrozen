@@ -2,7 +2,7 @@ package food
 
 import "encoding/json"
 
-type FoodInput struct {
+type FoodRequest struct {
 	// json key nya 'name'
 	Name string `json:"name" binding:"required" `
 	// PhotoPath string
