@@ -13,9 +13,11 @@ type foodHandler struct {
 	foodService food.Service
 }
 
-// func NewFoodHandler(foodService food.Service) *foodHandler {
-// 	return &foodHandler{foodService}
-// }
+// function NewFoodHandler bukan punya struct, tapi punya food.handler
+// saat dipanggil jadi seperti ini `foodService := food.NewService(foodRepository)`
+func NewFoodHandler(foodService food.Service) *foodHandler {
+	return &foodHandler{foodService}
+}
 
 // func (h *foodHandler) GetFoods(c *gin.Context) {
 // 	foods, err := h.foodService.FindAll()
@@ -34,6 +36,7 @@ type foodHandler struct {
 // 		"data": foodsResponse,
 // 	})
 // }
+
 // func (h *foodHandler) CreateFood(c *gin.Context) {
 // 	var foodRequest food.FoodRequest
 
@@ -41,7 +44,7 @@ type foodHandler struct {
 
 // public method diawali huruf CAPITAL
 // RootHandler adalah public method
-func RootHandler(c *gin.Context) {
+func (handler *foodHandler) RootHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"name":    "Ranufrozen",
 		"tagline": "makan enak untuk semua!",
@@ -49,7 +52,7 @@ func RootHandler(c *gin.Context) {
 }
 
 // Param untuk case base_url/:param
-func Show(c *gin.Context) {
+func (handler *foodHandler) Show(c *gin.Context) {
 	id := c.Param("id")
 
 	c.JSON(http.StatusOK, gin.H{
@@ -59,19 +62,29 @@ func Show(c *gin.Context) {
 
 // example case for 'query handler'
 // base_url/foods?id=12
-func OrderBy(c *gin.Context) {
+func (handler *foodHandler) OrderBy(c *gin.Context) {
 	field := c.Query("field")
+
+	foods, err := handler.foodService.FindAll()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	// for _, food := range foods {
+	// 	fmt.Println("food :", food.Name)
+	// }
 
 	c.JSON(http.StatusOK, gin.H{
 		"field": field,
+		"foods": foods,
 	})
 }
 
 // body
-func PostFoodHandler(c *gin.Context) {
-	var foodInput food.FoodInput
+func (handler *foodHandler) PostFoodHandler(c *gin.Context) {
+	var foodReq food.FoodRequest
 
-	err := c.ShouldBindJSON(&foodInput)
+	err := c.ShouldBindJSON(&foodReq)
 
 	if err != nil {
 		errorMessages := []string{}
@@ -86,9 +99,17 @@ func PostFoodHandler(c *gin.Context) {
 		return
 
 	}
+	food, err := handler.foodService.Create(foodReq)
+
+	// jika terjadi error pada DB
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": err,
+		})
+	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"name":  foodInput.Name,
-		"price": foodInput.Price,
+		"data": food,
 	})
+
 }

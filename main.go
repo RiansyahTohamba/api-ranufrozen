@@ -35,12 +35,6 @@ func main() {
 	foodService := food.NewService(foodRepository)
 	foodHandler := handler.NewFoodHandler(foodService)
 
-	// foods, err := foodRepository.FindAll()
-
-	// for _, food := range foods {
-	// 	fmt.Println("food :", food.Name)
-	// }
-
 	// buat migrasi kode entity to table
 	// db.AutoMigrate(&food.Food{})
 
