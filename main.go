@@ -4,6 +4,7 @@ import (
 	"api-ranufrozen/food"
 	"api-ranufrozen/handler"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -39,6 +40,12 @@ func main() {
 	// db.AutoMigrate(&food.Food{})
 
 	router := gin.Default()
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"name":    "Ranufrozen",
+			"panduan": "silahkan buka base_url/v1/url",
+		})
+	})
 
 	v1 := router.Group("/v1")
 
