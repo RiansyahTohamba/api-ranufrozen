@@ -3,7 +3,6 @@ package main
 import (
 	"api-ranufrozen/food"
 	"api-ranufrozen/handler"
-	"api-ranufrozen/merchant"
 	"api-ranufrozen/order"
 	"log"
 	"net/http"
@@ -42,10 +41,11 @@ func main() {
 	orderService := order.NewService(orderRepository)
 	orderHandler := handler.NewOrderHandler(orderService)
 
-	merchantRepo := merchant.NewRepository(db)
-	// bill: belum tau cara menggunakannya
-
+	// merchantRepo := merchant.NewRepository(db)
+	// merchantServ := merchant.NewService(merchantRepo)
+	// merchantHandler := handler.NewMerchantHandler(merchantServ)
 	// 1 order punya 1 bill
+	// bill: belum tau cara menggunakannya
 	// billRepo := bill.NewRepository(db)
 	// billService := bill.NewService(billRepo)
 	// billHandler := handler.NewBillHandler(billService)
@@ -85,10 +85,9 @@ func main() {
 	v1.GET("/orders/order_by", orderHandler.OrderBy)
 	// v1.POST("/order", orderHandler.PostorderHandler)
 
-	v1.GET("/", orderHandler.RootHandler)
-	v1.GET("/order/:id", orderHandler.Show)
-	v1.GET("/orders/order_by", orderHandler.OrderBy)
-	// v1.POST("/order", orderHandler.PostorderHandler)
+	// v1.GET("/", merchantHandler.RootHandler)
+	// v1.GET("/merchant/:id", merchantHandler.Show)
+	// v1.GET("/merchants/order_by", merchantHandler.OrderBy)
 
 	// ========================= V2 =====================
 	v2 := router.Group("/v2")

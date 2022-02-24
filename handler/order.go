@@ -16,7 +16,7 @@ type orderHandler struct {
 
 // function NeworderHandler bukan punya struct, tapi punya food.handler
 // saat dipanggil jadi seperti ini `orderService := food.NewService(foodRepository)`
-func NewHandler(orderService order.Service) *orderHandler {
+func NewOrderHandler(orderService order.Service) *orderHandler {
 	return &orderHandler{orderService}
 }
 

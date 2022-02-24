@@ -11,6 +11,7 @@ func mapExample() {
 	fmt.Println(balance["623748280"])
 
 }
+
 func main() {
 	mapExample()
 }

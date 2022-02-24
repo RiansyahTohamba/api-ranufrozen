@@ -12,4 +12,5 @@ type billHandler struct {
 // saat dipanggil jadi seperti ini `foodService := food.NewService(foodRepository)`
 func NewBillHandler(billService bill.Service) *billHandler {
 	return &billHandler{billService}
+
 }
