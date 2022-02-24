@@ -3,6 +3,7 @@ package main
 import (
 	"api-ranufrozen/food"
 	"api-ranufrozen/handler"
+	"api-ranufrozen/merchant"
 	"api-ranufrozen/order"
 	"log"
 	"net/http"
@@ -39,8 +40,9 @@ func main() {
 
 	orderRepository := order.NewRepository(db)
 	orderService := order.NewService(orderRepository)
-	orderHandler := handler.NewHandler(orderService)
+	orderHandler := handler.NewOrderHandler(orderService)
 
+	merchantRepo := merchant.NewRepository(db)
 	// bill: belum tau cara menggunakannya
 
 	// 1 order punya 1 bill
