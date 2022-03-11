@@ -2,17 +2,16 @@ package basic_test
 
 import (
 	"api-ranufrozen/basic"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHelloMain(m *testing.M) {
-	fmt.Println("Before Test")
-	m.Run()
-	fmt.Println("After Test")
-}
+// func TestHelloMain(m *testing.M) {
+// 	fmt.Println("Before Test")
+// 	m.Run()
+// 	fmt.Println("After Test")
+// }
 
 func TestHelloWorldTable(t *testing.T) {
 	// tipe data struct array?
