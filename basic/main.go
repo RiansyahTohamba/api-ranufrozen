@@ -2,12 +2,16 @@ package main
 
 import "fmt"
 
-func greetBio(bioChan chan string) {
-	bioChan <- "Bio"
+func sendEmail(bioChan chan string) {
+	fmt.Println("send email!")
+	bioChan <- "isSuccessSent=true"
 }
 
-func greetHani(haniChan chan string) {
-	haniChan <- "Hani"
+func greetHani() {
+	fmt.Print("create Progress Bar")
+	for idx := 0; idx < 50; idx++ {
+		fmt.Print("=")
+	}
 }
 
 func mapExample() {
@@ -21,10 +25,16 @@ func mapExample() {
 }
 
 func main() {
+	// buat channel dulu
 	bioChannel := make(chan string)
 	haniChannel := make(chan string)
-	go greetBio(bioChannel)
-	go greetHani(haniChannel)
+
+	// running secara paralel greetBio dan greetHani
+	// hasil yang mau di-return disimpan ke
+	go sendEmail(bioChannel)
+	go greetHani()
+
 	fmt.Println(<-bioChannel)
+
 	fmt.Println(<-haniChannel)
 }
