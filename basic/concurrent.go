@@ -1,7 +1,17 @@
 package basic
 
 import "fmt"
+/*
+keyword untuk concurency
+1. go
+2. <- 
+3. chan
 
+coba cari 3 hal ini
+1. \bgob\
+2. \b<-\b
+3. \b chan\b
+*/
 func sendEmail(bioChan chan string) {
 	fmt.Println("send email!")
 	bioChan <- "isSuccessSent=true"

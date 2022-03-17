@@ -34,6 +34,8 @@ func main() {
 	}
 
 	foodRepository := food.NewRepository(db)
+	// food = new Food()
+	// food.
 	foodService := food.NewService(foodRepository)
 	foodHandler := handler.NewFoodHandler(foodService)
 
@@ -69,7 +71,8 @@ func main() {
 
 	v1.GET("/", foodHandler.RootHandler)
 	v1.GET("/food/:id", foodHandler.Show)
-	v1.GET("/foods/order_by", foodHandler.OrderBy)
+	// v1.GET("/foods/order_by", foodHandler.OrderBy)
+	// v1.POST("/order", orderHandler.PostorderHandler)
 
 	// fitur order, halaman apa saja yang mungkin muncul?
 	// 1. as a pelanggan?

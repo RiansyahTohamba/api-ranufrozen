@@ -1,8 +1,8 @@
 package food
 
 type Service interface {
-	FindById(id int) (Food, error)
-	FindAll() ([]Food, error)
+	// FindById(id int) (Food, error)
+	// FindAll() ([]Food, error)
 	Create(food FoodRequest) (Food, error)
 }
 
@@ -16,15 +16,15 @@ func NewService(repo Repository) *service {
 	return &service{repo}
 }
 
-func (s *service) FindAll() ([]Food, error) {
-	foods, err := s.foodRepo.FindAll()
-	return foods, err
-}
+// func (s *service) FindAll() ([]Food, error) {
+// 	foods, err := s.foodRepo.FindAll()
+// 	return foods, err
+// }
 
-func (s *service) FindById(id int) (Food, error) {
-	food, err := s.foodRepo.FindById(id)
-	return food, err
-}
+// func (s *service) FindById(id int) (Food, error) {
+// 	food, err := s.foodRepo.FindById(id)
+// 	return food, err
+// }
 
 func (s *service) Create(foodReq FoodRequest) (Food, error) {
 	price, _ := foodReq.Price.Float64()
@@ -32,6 +32,7 @@ func (s *service) Create(foodReq FoodRequest) (Food, error) {
 		Name:  foodReq.Name,
 		Price: float64(price),
 	}
+	// disini harus ada pengondisian untuk price 'less or equal' dibawah zero
 	newFood, err := s.foodRepo.Create(food)
 	return newFood, err
 }

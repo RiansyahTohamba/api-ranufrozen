@@ -62,23 +62,23 @@ func (handler *foodHandler) Show(c *gin.Context) {
 
 // example case for 'query handler'
 // base_url/foods?id=12
-func (handler *foodHandler) OrderBy(c *gin.Context) {
-	field := c.Query("field")
+// func (handler *foodHandler) OrderBy(c *gin.Context) {
+// 	field := c.Query("field")
 
-	foods, err := handler.foodService.FindAll()
+// 	foods, err := handler.foodService.FindAll()
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	// for _, food := range foods {
-	// 	fmt.Println("food :", food.Name)
-	// }
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	// for _, food := range foods {
+// 	// 	fmt.Println("food :", food.Name)
+// 	// }
 
-	c.JSON(http.StatusOK, gin.H{
-		"field": field,
-		"foods": foods,
-	})
-}
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"field": field,
+// 		"foods": foods,
+// 	})
+// }
 
 // body
 func (handler *foodHandler) PostFoodHandler(c *gin.Context) {
