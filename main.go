@@ -4,6 +4,7 @@ import (
 	"api-ranufrozen/food"
 	"api-ranufrozen/handler"
 	"api-ranufrozen/order"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -21,11 +22,11 @@ func main() {
 	if errDotenv != nil {
 		log.Fatal("Error loading .env file")
 	}
-
+	// DB_PASSWORD = "AAAA"
 	dbUser := os.Getenv("DB_USER")
 	dbName := os.Getenv("DB_NAME")
 	dbPassword := os.Getenv("DB_PASSWORD")
-
+	// sudo systemctl start mysql
 	dsn := dbUser + ":" + dbPassword + "@tcp(127.0.0.1:3306)/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -69,7 +70,6 @@ func main() {
 
 	v1 := router.Group("/v1")
 
-	v1.GET("/", foodHandler.RootHandler)
 	v1.GET("/food/:id", foodHandler.Show)
 	// v1.GET("/foods/order_by", foodHandler.OrderBy)
 	// v1.POST("/order", orderHandler.PostorderHandler)
@@ -83,7 +83,6 @@ func main() {
 	// siapa tau ada masalah dengan transaksi
 	// jadi CS Punya data
 
-	v1.GET("/", orderHandler.RootHandler)
 	v1.GET("/order/:id", orderHandler.Show)
 	v1.GET("/orders/order_by", orderHandler.OrderBy)
 	// v1.POST("/order", orderHandler.PostorderHandler)
@@ -96,6 +95,6 @@ func main() {
 	v2 := router.Group("/v2")
 	// apakah handler nya dipisahkan saja?
 	v2.GET("/food/:id", foodHandler.Show)
-
+	fmt.Println("api running on port 8080")
 	router.Run()
 }
