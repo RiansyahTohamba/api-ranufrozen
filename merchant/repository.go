@@ -1,7 +1,11 @@
 package merchant
 
-import "gorm.io/gorm"
-
+// standard library go
+// 
+// third-party go
+import (
+	"gorm.io/gorm"
+)
 type Repository interface {
 	FindAll() ([]Merchant, error)
 }

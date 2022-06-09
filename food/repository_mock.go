@@ -27,9 +27,9 @@ type RepositoryMock struct {
 // 	return nil, nil
 // }
 
-func (repo *repository) Create(food Food) (Food, error) {
-	nugget := Food{
-		Name: "nugget",
-	}
-	return nugget, nil
-}
+// func (repo *repository) Create(food Food) (Food, error) {
+// 	nugget := Food{
+// 		Name: "nugget",
+// 	}
+// 	return nugget, nil
+// }

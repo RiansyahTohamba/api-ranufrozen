@@ -1,5 +1,7 @@
 package food
 
+import "fmt"
+
 type Service interface {
 	// FindById(id int) (Food, error)
 	// FindAll() ([]Food, error)
@@ -16,10 +18,26 @@ func NewService(repo Repository) *service {
 	return &service{repo}
 }
 
-// func (s *service) FindAll() ([]Food, error) {
-// 	foods, err := s.foodRepo.FindAll()
-// 	return foods, err
-// }
+func (s *service) FindAll() ([]Food, error) {
+	foods, err := s.foodRepo.FindAll()
+	return foods, err
+}
+
+func (ser *service) OptimisTx() {
+	ser.foodRepo.OptimisTx()
+}
+
+func (s *service) PrintFindAll() {
+	foods, err := s.FindAll()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, val := range foods {
+		fmt.Println(val)
+	}
+}
 
 // func (s *service) FindById(id int) (Food, error) {
 // 	food, err := s.foodRepo.FindById(id)

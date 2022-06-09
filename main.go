@@ -18,21 +18,18 @@ import (
 )
 
 func main() {
-	errDotenv := godotenv.Load()
-	if errDotenv != nil {
-		log.Fatal("Error loading .env file")
-	}
-	// DB_PASSWORD = "AAAA"
-	dbUser := os.Getenv("DB_USER")
-	dbName := os.Getenv("DB_NAME")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	// sudo systemctl start mysql
-	dsn := dbUser + ":" + dbPassword + "@tcp(127.0.0.1:3306)/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
+	db := getDBConn()
+	foodRepository := food.NewRepository(db)
+	foodService := food.NewService(foodRepository)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal("DB connect error")
-	}
+	// foodService.PrintFindAll()
+	foodService.OptimisTx()
+}
+
+func mainOld() {
+	// DB_PASSWORD = "AAAA"
+	// sudo systemctl start mysql
+	db := getDBConn()
 
 	foodRepository := food.NewRepository(db)
 	// food = new Food()
@@ -97,4 +94,23 @@ func main() {
 	v2.GET("/food/:id", foodHandler.Show)
 	fmt.Println("api running on port 8080")
 	router.Run()
+}
+
+func getDBConn() *gorm.DB {
+	errDotenv := godotenv.Load()
+	if errDotenv != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	dbUser := os.Getenv("DB_USER")
+	dbName := os.Getenv("DB_NAME")
+	dbPassword := os.Getenv("DB_PASSWORD")
+
+	dsn := dbUser + ":" + dbPassword + "@tcp(127.0.0.1:3306)/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
+
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("DB connect error")
+	}
+	return db
 }
