@@ -7,10 +7,10 @@ import (
 )
 
 type Repository interface {
-	// FindById(id int) (Food, error)
+	FindById(id int) Food
 	FindAll() ([]Food, error)
 	Create(food Food) (Food, error)
-	OptimisTx()
+	BuyProduct(id int, quantity int)
 }
 
 type repository struct {
@@ -21,38 +21,64 @@ func NewRepository(db *gorm.DB) *repository {
 	return &repository{db}
 }
 
-func (fr *repository) OptimisTx() {
-	statement := `SELECT id, val1, val2 FROM theTable WHERE iD = ?`
-	// find by id bagaimana ya?
-	row, err = fr.db.QueryRow(statement, id)
+func (fr *repository) FindById(id int) Food {
+	var food Food
+	fr.db.Model(Food{ID: id}).First(&food)
+	return food
+}
+
+// Optimis Transaction
+func (fr *repository) BuyProduct(id int, quantity int) {
+
+	fmt.Println("begin transaction !")
+
+	fr.db.Transaction(func(tx *gorm.DB) error {
+		// do some database operations in the transaction
+		// (use 'tx' from this point, not 'db')
+
+		// bagaimana caranya GORM mapping struct Food dan table food?
+		// padahal saya tidak buat secara explicit? struct Food = `table food`
+		var food Food
+		tx.Model(Food{ID: id}).First(&food)
+
+		fmt.Println(food.Stock)
+
+		newStock := food.Stock - quantity
+		fmt.Printf("stok berkurang menjadi %d\n", newStock)
+
+		dml := tx.Model(Food{}).Where("id = ?", id).Update("stock", newStock)
+
+		if err := dml.Error; err != nil {
+			// return any error will rollback
+			return err
+		}
+
+		// return nil will commit the whole transaction
+		return nil
+	})
 
 	// - {code that calculates new values}
 
-	newVal1 := 10 + 10
-	newVal2 := 10 + 30
+	// statupdate := `UPDATE theTable
+	// 	SET val1 = @newVal1
+	// 	WHERE iD = @theId AND
+	// 	val1 = @oldVal1;`
 
-	// oldVal1 := 10
+	// tx, err := tr.db.Begin()
 
-	statupdate := `UPDATE theTable 
-		SET val1 = @newVal1
-		WHERE iD = @theId AND 
-		val1 = @oldVal1;`
+	// _, err = tx.Exec(statupdate, id)
+	// if err != nil {
+	// 	tx.Rollback()
+	// 	return err
+	// }
 
-	tx, err := tr.db.Begin()
-
-	_, err = tx.Exec(statupdate, id)
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
-	if AffectedRows == 1 {
-		//    {go on with your other code}
-		fmt.Println("Perubahan success")
-	} else {
-		tx.Rollback()
-		//    {decide what to do since it has gone bad... in your code}
-	}
+	// if AffectedRows == 1 {
+	// 	//    {go on with your other code}
+	// 	fmt.Println("Perubahan success")
+	// } else {
+	// 	//    {decide what to do since it has gone bad... in your code}
+	// 	tx.Rollback()
+	// }
 }
 
 // function milik struct 'repository'

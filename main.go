@@ -24,6 +24,7 @@ func main() {
 
 	// foodService.PrintFindAll()
 	foodService.OptimisTx()
+	foodService.PrintProduct(1)
 }
 
 func mainOld() {

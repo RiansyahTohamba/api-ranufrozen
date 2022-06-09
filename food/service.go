@@ -1,6 +1,8 @@
 package food
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Service interface {
 	// FindById(id int) (Food, error)
@@ -24,7 +26,11 @@ func (s *service) FindAll() ([]Food, error) {
 }
 
 func (ser *service) OptimisTx() {
-	ser.foodRepo.OptimisTx()
+	prodId := 1
+	quantity := 20
+	fmt.Printf("Beli Produk sebanyak %d \n", quantity)
+	ser.foodRepo.BuyProduct(prodId, quantity)
+
 }
 
 func (s *service) PrintFindAll() {
@@ -37,6 +43,15 @@ func (s *service) PrintFindAll() {
 	for _, val := range foods {
 		fmt.Println(val)
 	}
+}
+
+func (ser *service) PrintProduct(id int) {
+	food := ser.Get(id)
+	fmt.Println(food)
+
+	fmt.Println("food.Stock terbaru")
+	fmt.Println(food.Stock)
+
 }
 
 // func (s *service) FindById(id int) (Food, error) {
@@ -55,15 +70,11 @@ func (s *service) Create(foodReq FoodRequest) (Food, error) {
 	return newFood, err
 }
 
-// func (service Service) Get(id int) (*Food, error) {
-// 	food := service.FoodRepo.FindById(id)
-// 	if food == nil {
-// 		return food, errors.New("Food Not Found")
-// 	} else {
-// 		return food, nil
-// 	}
+func (ser service) Get(id int) Food {
+	food := ser.foodRepo.FindById(id)
+	return food
 
-// }
+}
 
 // func GetMock(id int) Food {
 // 	food := Food{
