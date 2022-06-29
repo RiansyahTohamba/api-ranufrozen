@@ -2,21 +2,27 @@ package main
 
 import (
 	"database/sql"
-	"log"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	db, err = Migrate()
+	db, err := Migrate()
 	if err != nil {
-
+		panic(err)
 	}
-}
-func Migrate() {
-	db, err := sql.Open("sqlite3", "database")
+
+	rows, err := db.Query("SELECT * FROM user")
 	if err != nil {
-		log.Println(err)
+		panic(err)
+	}
+	fmt.Println(rows)
+}
+func Migrate() (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", "database/ranufrozen.db")
+	if err != nil {
+		return nil, err
 	}
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS user (
@@ -27,6 +33,7 @@ func Migrate() {
 		);
 	`)
 	if err != nil {
-
+		return nil, err
 	}
+	return db, nil
 }
