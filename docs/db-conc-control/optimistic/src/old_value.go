@@ -37,9 +37,7 @@ func (tr TransactionRepository) oldValue(id string) error {
 	row, err = tr.db.QueryRow(statement, id)
 
 	// - {code that calculates new values}
-
 	newVal1 := 10 + 10
-	newVal2 := 10 + 30
 
 	// oldVal1 := 10
 
