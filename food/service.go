@@ -27,7 +27,7 @@ func (s *service) FindAll() ([]Food, error) {
 
 func (ser *service) OptimisTx() {
 	prodId := 1
-	quantity := 20
+	quantity := 4
 	fmt.Printf("Beli Produk sebanyak %d \n", quantity)
 	ser.foodRepo.BuyProduct(prodId, quantity)
 

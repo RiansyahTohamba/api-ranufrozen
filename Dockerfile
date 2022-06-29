@@ -2,6 +2,7 @@ FROM golang:latest
 
 LABEL maintener="Riansyah Tohamba <mriansyah93@gmail.com>"
 
+
 WORKDIR /app
 
 COPY go.mod .
