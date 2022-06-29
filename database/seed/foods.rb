@@ -12,13 +12,44 @@ class SeedDB
 		insert_to_sqlite
 		p "insert_to_sqlite"
 	end
+	
 	def insert_to_sqlite
 		db = SQLite3::Database.new "../ranufrozen.db"		
+		
+		query_insert = "INSERT INTO foods (name, photo_path, rating, price, stock, is_super_seller, category, quantity_sold, description, discount) "
+		query_insert += "VALUES "	
+	
+		total_record = 30
+		total_record.times do |n|
+			name = Faker::Food.dish
+			photo_path= "breakfast_item.jpg"
+			rating= rand(1..5)
+			price= rand(30000..55000)
+			stock= rand(0..20)
+			is_super_seller= rand(0..1)
+			category= rand(1..5)
+			quantity_sold= rand(10..100)
+			description= "Rasanya bikin nyam nyam"
+			discount=0.1
+	
+			query = "('#{name}','#{photo_path}',#{rating},#{price},#{stock},#{is_super_seller},#{category},#{quantity_sold},'#{description}',#{discount})"
+	
+			if n != (total_record-1)			
+				query_insert += "#{query},"
+					
+			else
+				query_insert += "#{query};"
+			end
+		end
+		# p query_insert
+		db.execute(query_insert)
+
 		db.results_as_hash = true
-		query = 'SELECT count(*) as user FROM user'
+		query = 'SELECT count(*) as num FROM foods'
 		res = db.execute(query) 
 		p res[0]
 	end
+
 	def get_seed_food
 		foods = []
 		total_record = 30

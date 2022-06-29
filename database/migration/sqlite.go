@@ -31,6 +31,20 @@ func Migrate() (*sql.DB, error) {
 			password VARCHAR(255) NOT NULL,
 			email VARCHAR(255) NOT NULL			
 		);
+		
+		CREATE TABLE IF NOT EXISTS foods (
+			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			name VARCHAR(255) NOT NULL, 
+			photo_path VARCHAR(255) NOT NULL, 
+			rating INTEGER, 
+			price REAL, 
+			stock INTEGER, 
+			is_super_seller INTEGER, 
+			category INTEGER, 
+			quantity_sold INTEGER, 
+			description TEXT, 
+			discount INTEGER
+		);
 	`)
 	if err != nil {
 		return nil, err
