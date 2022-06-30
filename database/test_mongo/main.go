@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -69,4 +70,8 @@ type Food struct {
 	Category      int     `bson:"category"`
 	QuantitySold  int     `bson:"qtSold"`
 	Description   string  `bson:"desc"`
+	Discount      float32
+
+	CreatedAt time.Time
+	UpdateAt  time.Time
 }
