@@ -20,6 +20,10 @@ func NewService(repo Repository) *service {
 	return &service{repo}
 }
 
+func (s *service) Sum(num1, num2 int) int {
+	return 0
+}
+
 func (s *service) FindAll() ([]Food, error) {
 	foods, err := s.foodRepo.FindAll()
 	return foods, err
