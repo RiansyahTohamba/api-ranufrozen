@@ -6,11 +6,11 @@ require "mysql2"
 
 class SeedDB 
 	def main
-		# foods = get_seed_food
-		# insert_to_mongo(foods)
+		foods = get_seed_food
+		insert_to_mongo(foods)
 		# insert_to_mysql
-		insert_to_sqlite
-		p "insert_to_sqlite"
+		# insert_to_sqlite
+		# p "insert_to_sqlite"
 	end
 	
 	def insert_to_sqlite
@@ -73,7 +73,7 @@ class SeedDB
 	end
 	def insert_to_mongo(foods)
 		client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'ranufrozen')
-		collection = client[:products]
+		collection = client[:foods]
 		collection.insert_many(foods)
 		p "succesfully inserted"	
 		p collection.count
