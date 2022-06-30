@@ -8,6 +8,19 @@ type RepositoryMock struct {
 	Mock mock.Mock
 }
 
+func (repo *RepositoryMock) BuyProduct(id int, quantity int) {
+}
+func (repo *RepositoryMock) FindById(id int) Food {
+	return Food{}
+}
+func (repo *RepositoryMock) FindAll() ([]Food, error) {
+	return []Food{}, nil
+
+}
+func (repo *RepositoryMock) Create(food Food) (Food, error) {
+	return Food{}, nil
+}
+
 // func (repo *RepositoryMock) FindById(id int) (Food, error) {
 // arguments := repo.Mock.Called(id)
 // if arguments.Get(0) == nil {
