@@ -10,13 +10,13 @@ import (
 )
 
 type foodHandler struct {
-	foodService food.Service
+	foodRepo food.Repository
 }
 
 // function NewFoodHandler bukan punya struct, tapi punya food.handler
 // saat dipanggil jadi seperti ini `foodService := food.NewService(foodRepository)`
-func NewFoodHandler(foodService food.Service) *foodHandler {
-	return &foodHandler{foodService}
+func NewFoodHandler(foodRepo food.Repository) *foodHandler {
+	return &foodHandler{foodRepo}
 }
 
 // func (h *foodHandler) GetFoods(c *gin.Context) {
@@ -99,7 +99,8 @@ func (handler *foodHandler) PostFoodHandler(c *gin.Context) {
 		return
 
 	}
-	food, err := handler.foodService.Create(foodReq)
+	// TODO: mapping FoodRequest to Food
+	food, err := handler.foodRepo.Create(food.Food{})
 
 	// jika terjadi error pada DB
 	if err != nil {

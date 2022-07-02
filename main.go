@@ -1,42 +1,55 @@
 package main
 
 import (
+	"api-ranufrozen/database"
+	"api-ranufrozen/drink"
 	"api-ranufrozen/food"
 	"api-ranufrozen/handler"
 	"api-ranufrozen/order"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
-
-	"github.com/joho/godotenv"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/mysql"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 func main() {
-	db := getDBConn()
-	foodRepository := food.NewRepository(db)
-	foodService := food.NewService(foodRepository)
+	cli()
+	// restAPI()
+}
+func cli() {
+	rdb := database.GetRDBConn()
+	foodRepository := food.NewRepository(rdb)
+	foodCli := food.NewCli(foodRepository)
+	// foodCli.OptimisTx()
+	// foodCli.PrintProduct(1)
 
-	foodService.PrintFindAll()
-	// foodService.OptimisTx()
-	// foodService.PrintProduct(1)
+	foodCli.PrintFindAll()
+	mongoCon := database.GetMongoConn()
+	// ==== Drink example ======
+	drinkRep := drink.NewDrinkRepo(mongoCon)
+	drinkCli := drink.NewCli(*drinkRep)
+	// 1. Create Drink, many Drink
+	// InsetSampleDrink(db)
+
+	// 2. Retrieve Specific Drink
+	id := "62bd7b4ab1cf5abe26fb7e6b"
+	fmt.Println(drinkCli.Show(id))
+
+	// 3. Retrieve All Drink
+	fmt.Println(drinkCli.List())
+
 }
 
-func mainOld() {
+func restAPI() {
 	// DB_PASSWORD = "AAAA"
 	// sudo systemctl start mysql
-	db := getDBConn()
+	db := database.GetRDBConn()
 
 	foodRepository := food.NewRepository(db)
 	// food = new Food()
 	// food.
-	foodService := food.NewService(foodRepository)
-	foodHandler := handler.NewFoodHandler(foodService)
+	// foodService := food.NewService(foodRepository)
+	foodHandler := handler.NewFoodHandler(foodRepository)
 
 	orderRepository := order.NewRepository(db)
 	orderService := order.NewService(orderRepository)
@@ -95,41 +108,4 @@ func mainOld() {
 	v2.GET("/food/:id", foodHandler.Show)
 	fmt.Println("api running on port 8080")
 	router.Run()
-}
-
-func getDBConn() *gorm.DB {
-	errDotenv := godotenv.Load()
-	if errDotenv != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	appEnv := os.Getenv("APP_ENV")
-
-	var db *gorm.DB
-	var err error
-
-	if appEnv == "development" {
-		db, err = getSqliteConn()
-	} else if appEnv == "production" {
-		db, err = getMysqlConn()
-	}
-
-	if err != nil {
-		log.Fatal("DB connect error")
-	}
-	return db
-}
-
-func getSqliteConn() (*gorm.DB, error) {
-	db, err := gorm.Open(sqlite.Open("database/ranufrozen.db"), &gorm.Config{})
-	return db, err
-}
-
-func getMysqlConn() (*gorm.DB, error) {
-	dbUser := os.Getenv("DB_USER")
-	dbName := os.Getenv("DB_NAME")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dsn := dbUser + ":" + dbPassword + "@tcp(127.0.0.1:3306)/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	return db, err
 }

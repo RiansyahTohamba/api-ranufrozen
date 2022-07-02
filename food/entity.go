@@ -14,9 +14,8 @@ type Food struct {
 	IsSuperSeller int8
 	Category      int
 	QuantitySold  int
-
-	Description string
-	Discount    float32
+	Description   string
+	Discount      float32
 
 	CreatedAt time.Time
 	UpdateAt  time.Time
