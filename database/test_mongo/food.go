@@ -58,3 +58,5 @@ type Food struct {
 	CreatedAt time.Time
 	UpdateAt  time.Time
 }
+
+// relational

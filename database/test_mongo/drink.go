@@ -7,6 +7,7 @@ import (
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -26,14 +27,21 @@ func (dr drinkRepository) paginate(offset, limit int) ([]Drink, error) {
 	return []Drink{}, nil
 }
 
-func (dr drinkRepository) findById() ([]Drink, error) {
-	// var ctx = context.Background()
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// 	return nil, errors.New("error found")
-	// }
+func (dr drinkRepository) findOne(id string) (Drink, error) {
+	var ctx = context.Background()
 
-	return Drink{}, nil
+	var drink Drink
+	objectID, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.M{"_id": objectID}
+
+	csr := dr.db.Collection("drinks").FindOne(ctx, filter)
+	csr.Decode(&drink)
+
+	if csr.Err() != nil {
+		return drink, csr.Err()
+	}
+
+	return drink, nil
 }
 
 func (dr drinkRepository) findAll() ([]Drink, error) {

@@ -26,7 +26,8 @@ func main() {
 	// InsetSampleDrink(db)
 
 	// 2. Retrieve Specific Drink
-	fmt.Println(drinkRep.find())
+	id := "62bd7b4ab1cf5abe26fb7e6b"
+	fmt.Println(drinkRep.findOne(id))
 
 	// 3. Retrieve All Drink
 	fmt.Println(drinkRep.findAll())
