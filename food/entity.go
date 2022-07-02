@@ -5,15 +5,16 @@ import (
 )
 
 type Food struct {
-	Name          string  `bson:"name"`
-	PhotoPath     string  `bson:"photoPath"`
-	Rating        int     `bson:"rating"`
-	Price         float64 `bson:"price"`
-	Stock         int     `bson:"stock"`
-	IsSuperSeller int8    `bson:"isSuperSeller"`
-	Category      int     `bson:"category"`
-	QuantitySold  int     `bson:"qtSold"`
-	Description   string  `bson:"desc"`
+	ID            int
+	Name          string
+	PhotoPath     string
+	Rating        int
+	Price         float64
+	Stock         int
+	IsSuperSeller int8
+	Category      int
+	QuantitySold  int
+	Description   string
 	Discount      float32
 
 	CreatedAt time.Time
