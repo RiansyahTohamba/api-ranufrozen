@@ -12,6 +12,10 @@ import (
 )
 
 func main() {
+	cli()
+	// restAPI()
+}
+func cli() {
 	rdb := database.GetRDBConn()
 	foodRepository := food.NewRepository(rdb)
 	foodService := food.NewService(foodRepository)
@@ -21,10 +25,10 @@ func main() {
 	// foodService.PrintProduct(1)
 }
 
-func mainOld() {
+func restAPI() {
 	// DB_PASSWORD = "AAAA"
 	// sudo systemctl start mysql
-	db := database.getRDBConn()
+	db := database.GetRDBConn()
 
 	foodRepository := food.NewRepository(db)
 	// food = new Food()
