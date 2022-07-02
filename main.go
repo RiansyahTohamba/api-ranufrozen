@@ -2,6 +2,7 @@ package main
 
 import (
 	"api-ranufrozen/database"
+	"api-ranufrozen/drink"
 	"api-ranufrozen/food"
 	"api-ranufrozen/handler"
 	"api-ranufrozen/order"
@@ -18,11 +19,25 @@ func main() {
 func cli() {
 	rdb := database.GetRDBConn()
 	foodRepository := food.NewRepository(rdb)
-	foodService := food.NewService(foodRepository)
+	foodCli := food.NewCli(foodRepository)
+	// foodCli.OptimisTx()
+	// foodCli.PrintProduct(1)
 
-	foodService.PrintFindAll()
-	// foodService.OptimisTx()
-	// foodService.PrintProduct(1)
+	foodCli.PrintFindAll()
+	mongoCon := database.GetMongoConn()
+	// ==== Drink example ======
+	drinkRep := drink.NewDrinkRepo(mongoCon)
+
+	// 1. Create Drink, many Drink
+	// InsetSampleDrink(db)
+
+	// 2. Retrieve Specific Drink
+	id := "62bd7b4ab1cf5abe26fb7e6b"
+	fmt.Println(drinkRep.findOne(id))
+
+	// 3. Retrieve All Drink
+	fmt.Println(drinkRep.findAll())
+
 }
 
 func restAPI() {

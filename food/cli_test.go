@@ -14,7 +14,7 @@ var _ = Describe("Service", func() {
 	// foodRepository := &food.NewRepository(db)
 	foodRepository := food.RepositoryMock{Mock: mock.Mock{}}
 
-	foodService := food.NewService(&foodRepository)
+	foodService := food.NewCli(&foodRepository)
 
 	foodReq := food.FoodRequest{
 		Name:  "Riansyah",

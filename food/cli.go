@@ -4,32 +4,26 @@ import (
 	"fmt"
 )
 
-type Service interface {
-	// FindById(id int) (Food, error)
-	// FindAll() ([]Food, error)
-	Create(food FoodRequest) (Food, error)
-}
-
 // struct vs interface?
 // type
-type service struct {
+type cli struct {
 	foodRepo Repository
 }
 
-func NewService(repo Repository) *service {
-	return &service{repo}
+func NewCli(repo Repository) *cli {
+	return &cli{repo}
 }
 
-func (s *service) Sum(num1, num2 int) int {
+func (s *cli) Sum(num1, num2 int) int {
 	return 0
 }
 
-func (s *service) FindAll() ([]Food, error) {
+func (s *cli) FindAll() ([]Food, error) {
 	foods, err := s.foodRepo.FindAll()
 	return foods, err
 }
 
-func (ser *service) OptimisTx() {
+func (ser *cli) OptimisTx() {
 	prodId := 1
 	quantity := 4
 	fmt.Printf("Beli Produk sebanyak %d \n", quantity)
@@ -37,7 +31,7 @@ func (ser *service) OptimisTx() {
 
 }
 
-func (s *service) PrintFindAll() {
+func (s *cli) PrintFindAll() {
 	foods, err := s.FindAll()
 
 	if err != nil {
@@ -49,7 +43,7 @@ func (s *service) PrintFindAll() {
 	}
 }
 
-func (ser *service) PrintProduct(id int) {
+func (ser *cli) PrintProduct(id int) {
 	food := ser.Get(id)
 	fmt.Println(food)
 
@@ -58,12 +52,12 @@ func (ser *service) PrintProduct(id int) {
 
 }
 
-// func (s *service) FindById(id int) (Food, error) {
+// func (s *cli) FindById(id int) (Food, error) {
 // 	food, err := s.foodRepo.FindById(id)
 // 	return food, err
 // }
 
-func (s *service) Create(foodReq FoodRequest) (Food, error) {
+func (s *cli) Create(foodReq FoodRequest) (Food, error) {
 	price, _ := foodReq.Price.Float64()
 	food := Food{
 		Name:  foodReq.Name,
@@ -74,7 +68,7 @@ func (s *service) Create(foodReq FoodRequest) (Food, error) {
 	return newFood, err
 }
 
-func (ser service) Get(id int) Food {
+func (ser cli) Get(id int) Food {
 	food := ser.foodRepo.FindById(id)
 	return food
 
