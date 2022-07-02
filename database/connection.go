@@ -1,30 +1,39 @@
 package database
 
 import (
+	"context"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-)
-
-const (
-	serverMongo   = "172.17.0.2"
-	userMysql     = "postgres"
-	passwordMysql = "postgres"
-	mongoDB       = "jug"
-	mysqlDB       = "jug"
-	sqlitePath    = ""
 )
 
 // key-value
 func GetRedisConn() {
 
 }
-func GetMongoConn() {
+func GetMongoConn() *mongo.Database {
+	var ctx = context.Background()
 
+	clOpt := options.Client()
+	clOpt.ApplyURI("mongodb://localhost:27017")
+	client, err := mongo.NewClient(clOpt)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	err = client.Connect(ctx)
+
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	return client.Database("ranufrozen")
 }
 
 func GetRDBConn() *gorm.DB {

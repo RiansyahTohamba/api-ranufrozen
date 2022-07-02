@@ -27,16 +27,16 @@ func cli() {
 	mongoCon := database.GetMongoConn()
 	// ==== Drink example ======
 	drinkRep := drink.NewDrinkRepo(mongoCon)
-
+	drinkCli := drink.NewCli(*drinkRep)
 	// 1. Create Drink, many Drink
 	// InsetSampleDrink(db)
 
 	// 2. Retrieve Specific Drink
 	id := "62bd7b4ab1cf5abe26fb7e6b"
-	fmt.Println(drinkRep.findOne(id))
+	fmt.Println(drinkCli.Show(id))
 
 	// 3. Retrieve All Drink
-	fmt.Println(drinkRep.findAll())
+	fmt.Println(drinkCli.List())
 
 }
 
@@ -48,8 +48,8 @@ func restAPI() {
 	foodRepository := food.NewRepository(db)
 	// food = new Food()
 	// food.
-	foodService := food.NewService(foodRepository)
-	foodHandler := handler.NewFoodHandler(foodService)
+	// foodService := food.NewService(foodRepository)
+	foodHandler := handler.NewFoodHandler(foodRepository)
 
 	orderRepository := order.NewRepository(db)
 	orderService := order.NewService(orderRepository)

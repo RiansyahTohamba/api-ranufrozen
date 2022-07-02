@@ -15,9 +15,9 @@ type foodHandler struct {
 
 // function NewFoodHandler bukan punya struct, tapi punya food.handler
 // saat dipanggil jadi seperti ini `foodService := food.NewService(foodRepository)`
-// func NewFoodHandler(foodService food.cli) *foodHandler {
-// 	return &foodHandler{foodService}
-// }
+func NewFoodHandler(foodRepo food.Repository) *foodHandler {
+	return &foodHandler{foodRepo}
+}
 
 // func (h *foodHandler) GetFoods(c *gin.Context) {
 // 	foods, err := h.foodService.FindAll()
@@ -103,11 +103,11 @@ func (handler *foodHandler) PostFoodHandler(c *gin.Context) {
 	food, err := handler.foodRepo.Create(food.Food{})
 
 	// jika terjadi error pada DB
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{
-	// 		"errors": err,
-	// 	})
-	// }
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": err,
+		})
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": food,
