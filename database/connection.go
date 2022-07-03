@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/go-redis/redis/v9"
+
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -14,9 +16,18 @@ import (
 )
 
 // key-value
-func GetRedisConn() {
 
+func GetRedisConn() *redis.Client {
+	// run on ubuntu redis-server --daemonize yes
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
+	return rdb
 }
+
 func GetMongoConn() *mongo.Database {
 	var ctx = context.Background()
 
