@@ -2,8 +2,10 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/go-redis/redis/v9"
 
@@ -18,14 +20,26 @@ import (
 // key-value
 
 func GetRedisConn() *redis.Client {
-	// run on ubuntu redis-server --daemonize yes
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+	var once sync.Once
+	var kvdb *redis.Client
+	var ctx = context.Background()
+
+	once.Do(func() {
+		kvdb = redis.NewClient(&redis.Options{
+			Addr:     "localhost:6379",
+			Password: "", // no password set
+			DB:       0,  // use default DB
+		})
 	})
 
-	return rdb
+	_, err := kvdb.Ping(ctx).Result()
+
+	if err != nil {
+		fmt.Println("running redis-server --daemonize yes")
+		log.Fatal(err)
+	}
+
+	return kvdb
 }
 
 func GetMongoConn() *mongo.Database {
