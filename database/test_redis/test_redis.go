@@ -33,3 +33,23 @@ func GetRedisConn() *RedisClient {
 	}
 	return redisClient
 }
+
+// ini masih pakai data string, bagiamana dengan tipe data yang lain?
+// harus baca referensi dulu utk mengetahui best practice membuat cart.
+// fokus di main.py
+
+// == CART function
+func (rc *RedisClient) AddCart(ctx context.Context, cartId string, item string) {
+	err := rc.Set(ctx, cartId, item, 0).Err()
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func (rc *RedisClient) GetCart(ctx context.Context, cartId string) string {
+	val, err := rc.Get(ctx, cartId).Result()
+	if err != nil {
+		log.Println(err)
+	}
+	return val
+}

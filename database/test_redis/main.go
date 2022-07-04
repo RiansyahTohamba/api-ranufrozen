@@ -5,21 +5,28 @@ import (
 	"fmt"
 )
 
+var ctx = context.TODO()
+
 func main() {
-	ctx := context.Background()
+	rClient := GetRedisConn()
+	// insertData(*rClient)
+	// GET
+	cartUser1 := rClient.GetCart(ctx, "user1")
+	cartUser2 := rClient.GetCart(ctx, "user2")
 
-	kvdb := GetRedisConn()
-	err := kvdb.Set(ctx, "key", "value", 0).Err()
+	fmt.Println(cartUser1)
+	fmt.Println(cartUser2)
 
-	if err != nil {
-		fmt.Println("running redis-server --daemonize yes")
-		panic(err)
-	}
+}
 
-	val, err := kvdb.Get(ctx, "key").Result()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("key", val)
+func insertData(rClient RedisClient) {
+	// SET
+	// User1 Buy Food
+	rClient.AddCart(ctx, "user1", "buah naga")
+	rClient.AddCart(ctx, "user1", "nasi kucing")
+
+	// User2 Buy Drink
+	rClient.AddCart(ctx, "user2", "latte coffee")
+	rClient.AddCart(ctx, "user2", "latte tea")
 
 }

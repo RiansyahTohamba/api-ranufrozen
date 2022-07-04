@@ -22,7 +22,6 @@ type RedisClient struct{ *redis.Client }
 func GetRedisConn() *RedisClient {
 	var once sync.Once
 	var redisClient *RedisClient
-	var ctx = context.Background()
 
 	once.Do(func() {
 		client := redis.NewClient(&redis.Options{
@@ -33,7 +32,7 @@ func GetRedisConn() *RedisClient {
 		redisClient = &RedisClient{client}
 	})
 
-	_, err := redisClient.Ping(ctx).Result()
+	_, err := redisClient.Ping(context.TODO()).Result()
 
 	if err != nil {
 		fmt.Println("running redis-server --daemonize yes")
