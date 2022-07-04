@@ -17,29 +17,29 @@ import (
 	"gorm.io/gorm"
 )
 
-// key-value
+type RedisClient struct{ *redis.Client }
 
-func GetRedisConn() *redis.Client {
+func GetRedisConn() *RedisClient {
 	var once sync.Once
-	var kvdb *redis.Client
+	var redisClient *RedisClient
 	var ctx = context.Background()
 
 	once.Do(func() {
-		kvdb = redis.NewClient(&redis.Options{
+		client := redis.NewClient(&redis.Options{
 			Addr:     "localhost:6379",
 			Password: "", // no password set
 			DB:       0,  // use default DB
 		})
+		redisClient = &RedisClient{client}
 	})
 
-	_, err := kvdb.Ping(ctx).Result()
+	_, err := redisClient.Ping(ctx).Result()
 
 	if err != nil {
 		fmt.Println("running redis-server --daemonize yes")
-		log.Fatal(err)
+		log.Fatalf("Could not connect to redis %v", err)
 	}
-
-	return kvdb
+	return redisClient
 }
 
 func GetMongoConn() *mongo.Database {
