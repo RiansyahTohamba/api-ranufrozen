@@ -53,3 +53,10 @@ func (rc *RedisClient) GetCart(ctx context.Context, cartId string) string {
 	}
 	return val
 }
+
+func (rc *RedisClient) DeleteCart(ctx context.Context, cartId string) {
+	err := rc.Del(ctx, cartId).Err()
+	if err != nil {
+		log.Println(err)
+	}
+}
