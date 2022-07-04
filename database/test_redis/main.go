@@ -8,31 +8,34 @@ import (
 var ctx = context.TODO()
 
 func main() {
-	rClient := GetRedisConn()
-	insertData(*rClient)
-	// GET
-	fmt.Println(rClient.GetCart(ctx, "user1"))
-	fmt.Println(rClient.GetCart(ctx, "user2"))
+	rdsClient := GetRedisConn()
+	cartRepo := NewCart(rdsClient)
 
-	removeData(*rClient)
+	insertData(*cartRepo)
+	// GET
+	fmt.Println(cartRepo.GetCart(ctx, "user1"))
+	fmt.Println(cartRepo.GetCart(ctx, "user2"))
+
+	removeData(*cartRepo)
 	fmt.Println("after deletion")
-	fmt.Println(rClient.GetCart(ctx, "user1"))
-	fmt.Println(rClient.GetCart(ctx, "user2"))
+	fmt.Println(cartRepo.GetCart(ctx, "user1"))
+	fmt.Println(cartRepo.GetCart(ctx, "user2"))
 
 }
 
-func insertData(rClient RedisClient) {
+func insertData(cartRepo CartRepository) {
 	// SET
 	// User1 Buy Food
-	rClient.AddCart(ctx, "user1", "buah naga")
-	rClient.AddCart(ctx, "user1", "nasi kucing")
+	cartRepo.AddCart(ctx, "user1", "buah naga")
+	// buah naga nya akan tertimpa dengan nasi kucing
+	cartRepo.AddCart(ctx, "user1", "nasi kucing")
 
 	// User2 Buy Drink
-	rClient.AddCart(ctx, "user2", "latte coffee")
-	rClient.AddCart(ctx, "user2", "latte tea")
+	cartRepo.AddCart(ctx, "user2", "latte coffee")
+	cartRepo.AddCart(ctx, "user2", "latte tea")
 }
 
-func removeData(rClient RedisClient) {
-	rClient.DeleteCart(ctx, "user1")
-	rClient.DeleteCart(ctx, "user2")
+func removeData(cartRepo CartRepository) {
+	cartRepo.DeleteCart(ctx, "user1")
+	cartRepo.DeleteCart(ctx, "user2")
 }
