@@ -10,7 +10,8 @@ var ctx = context.TODO()
 func main() {
 	rdsClient := GetRedisConn()
 	// cartExample(rdsClient)
-	stringExample(rdsClient)
+	// stringExample(rdsClient)
+	hashExample(rdsClient)
 
 }
 
@@ -30,6 +31,14 @@ func stringExample(rdsClient *RedisClient) {
 }
 
 func hashExample(rdsClient *RedisClient) {
+	hsRep := NewHashRepo(rdsClient)
+	hashkey := "cart:c1"
+	res := hsRep.FindAll(hashkey)
+	for k, v := range res {
+		fmt.Println(k)
+		fmt.Println(v)
+		fmt.Println("-----")
+	}
 }
 
 func cartExample(rdsClient *RedisClient) {
