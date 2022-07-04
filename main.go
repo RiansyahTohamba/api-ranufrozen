@@ -6,8 +6,11 @@ import (
 	"api-ranufrozen/food"
 	"api-ranufrozen/handler"
 	"api-ranufrozen/order"
+	"context"
 	"fmt"
+	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,28 +19,65 @@ func main() {
 	cli()
 	// restAPI()
 }
-func cli() {
-	rdb := database.GetRDBConn()
-	foodRepository := food.NewRepository(rdb)
-	foodCli := food.NewCli(foodRepository)
-	// foodCli.OptimisTx()
-	// foodCli.PrintProduct(1)
 
-	foodCli.PrintFindAll()
-	mongoCon := database.GetMongoConn()
+func exampleCase() {
+
+}
+
+func cli() {
+	// foodRdb()
+	// drinkDocBased()
+	shopCartKv()
+}
+
+func shopCartKv() {
+	// ==== shopping cart
+	// connect redis terlebih dahulu
+	kvdb := database.GetRedisConn()
+	fmt.Println(kvdb)
+	key := "key-1"
+	data := "Hello Redis"
+	ttl := time.Duration(3) * time.Second
+	// store data using SET command
+	op1 := kvdb.Set(context.Background(), key, data, ttl)
+
+	if err := op1.Err(); err != nil {
+		fmt.Printf("unable to SET data. error: %v", err)
+		return
+	}
+	log.Println("set operation success")
+
+	// Buy Food
+	// Buy Drink
+	// pertanyaan terkait:
+	// 1. disimpan dimana feature nya?
+	// 2. apakah perlu repo?
+}
+func drinkDocBased() {
 	// ==== Drink example ======
-	drinkRep := drink.NewDrinkRepo(mongoCon)
-	drinkCli := drink.NewCli(*drinkRep)
 	// 1. Create Drink, many Drink
 	// InsetSampleDrink(db)
-
 	// 2. Retrieve Specific Drink
+	// 3. Retrieve All Drink
+	mongoCon := database.GetMongoConn()
+
+	drinkRep := drink.NewDrinkRepo(mongoCon)
+	drinkCli := drink.NewCli(*drinkRep)
+
 	id := "62bd7b4ab1cf5abe26fb7e6b"
 	fmt.Println(drinkCli.Show(id))
 
-	// 3. Retrieve All Drink
 	fmt.Println(drinkCli.List())
+}
 
+func foodRdb() {
+	rdb := database.GetRDBConn()
+	foodRepository := food.NewRepository(rdb)
+	foodCli := food.NewCli(foodRepository)
+
+	foodCli.PrintFindAll()
+	// foodCli.OptimisTx()
+	// foodCli.PrintProduct(1)
 }
 
 func restAPI() {
