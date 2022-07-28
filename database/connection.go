@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -76,5 +77,9 @@ func getMysqlConn() (*gorm.DB, error) {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dsn := dbUser + ":" + dbPassword + "@tcp(127.0.0.1:3306)/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	return db, err
+	if err != nil {
+		fmt.Println("running : sudo systemctl start mysql")
+		log.Println(err)
+	}
+	return db, nil
 }
