@@ -2,8 +2,12 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
+	"sync"
+
+	"github.com/go-redis/redis/v9"
 
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,10 +17,30 @@ import (
 	"gorm.io/gorm"
 )
 
-// key-value
-func GetRedisConn() {
+type RedisClient struct{ *redis.Client }
 
+func GetRedisConn() *RedisClient {
+	var once sync.Once
+	var redisClient *RedisClient
+
+	once.Do(func() {
+		client := redis.NewClient(&redis.Options{
+			Addr:     "localhost:6379",
+			Password: "", // no password set
+			DB:       0,  // use default DB
+		})
+		redisClient = &RedisClient{client}
+	})
+
+	_, err := redisClient.Ping(context.TODO()).Result()
+
+	if err != nil {
+		fmt.Println("running redis-server --daemonize yes")
+		log.Fatalf("Could not connect to redis %v", err)
+	}
+	return redisClient
 }
+
 func GetMongoConn() *mongo.Database {
 	var ctx = context.Background()
 
