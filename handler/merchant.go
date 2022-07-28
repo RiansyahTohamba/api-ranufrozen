@@ -8,20 +8,27 @@ import (
 )
 
 type merchantHandler struct {
-	merchantServ merchant.Service
+	merchantRepo *merchant.Repository
 }
 
-func NewMerchantHandler(merchServ *merchant.Service) *merchantHandler {
-	return &merchantHandler{merchServ}
-	// func main() call NewMerchantHandler()
-	// NewMerchantHandler() require params 'merchant.Service'
-	// 'merchant.Service' di isi pada struct merchantHandler
-	// merchantHandler digunakan pada method RootHandler dan sebagainya
-	// method vs function: 2 hal yg berbeda pada Go
+func NewMerchantHandler(merchantRepo *merchant.Repository) *merchantHandler {
+	return &merchantHandler{merchantRepo}
 }
 
-func (handler *merchantHandler) RootHandler(con *gin.Context) {
-	con.JSON(http.StatusOK, gin.H{
+func (hd *merchantHandler) RootHandler(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
 		"merchants": "merchants",
+	})
+}
+
+func (hd *merchantHandler) Show(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg": "hai",
+	})
+}
+
+func (hd *merchantHandler) OrderBy(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg": "hai",
 	})
 }

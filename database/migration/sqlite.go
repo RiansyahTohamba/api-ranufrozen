@@ -8,6 +8,11 @@ import (
 )
 
 func main() {
+	// jika menggun
+	// buat migrasi kode entity to table
+	// db := gorm.DB
+	// db.AutoMigrate(&food.Food{})
+
 	db, err := Migrate()
 	if err != nil {
 		panic(err)
