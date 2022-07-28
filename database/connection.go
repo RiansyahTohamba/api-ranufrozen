@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/go-redis/redis"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -14,8 +15,13 @@ import (
 )
 
 // key-value
-func GetRedisConn() {
-
+func GetRedisConn() *redis.Client {
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "",
+		DB:       0,
+	})
+	return client
 }
 func GetMongoConn() *mongo.Database {
 	var ctx = context.Background()
