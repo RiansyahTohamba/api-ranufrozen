@@ -3,7 +3,6 @@ package food
 import (
 	"fmt"
 
-	"github.com/go-redis/redis/v9"
 	"gorm.io/gorm"
 )
 
@@ -15,12 +14,11 @@ type Repository interface {
 }
 
 type repository struct {
-	db    *gorm.DB
-	cache *redis.Client
+	db *gorm.DB
 }
 
-func NewRepository(gorm *gorm.DB, rcl *redis.Client) *repository {
-	return &repository{db: gorm, cache: rcl}
+func NewRepository(gorm *gorm.DB) *repository {
+	return &repository{db: gorm}
 }
 
 func (fr *repository) FindById(id int) Food {
