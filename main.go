@@ -13,7 +13,8 @@ func main() {
 }
 func cli() {
 	rdb := database.GetRDBConn()
-	foodRepository := food.NewRepository(rdb)
+	rcl := database.GetRedisConn()
+	foodRepository := food.NewRepository(rdb, rcl)
 	foodCli := food.NewCli(foodRepository)
 	foodCli.PrintFindAll()
 }

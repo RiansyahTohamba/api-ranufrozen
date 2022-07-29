@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v9"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
