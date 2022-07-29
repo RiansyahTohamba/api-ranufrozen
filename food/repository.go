@@ -17,14 +17,26 @@ type repository struct {
 	db *gorm.DB
 }
 
-func NewRepository(db *gorm.DB) *repository {
-	return &repository{db}
+func NewRepository(gorm *gorm.DB) *repository {
+	return &repository{db: gorm}
 }
 
 func (fr *repository) FindById(id int) Food {
 	var food Food
+
 	fr.db.Model(Food{ID: id}).First(&food)
 	return food
+}
+
+func (r *repository) FindAll() ([]Food, error) {
+	var foods []Food
+	err := r.db.Find(&foods).Error
+	return foods, err
+}
+
+func (r *repository) Create(food Food) (Food, error) {
+	err := r.db.Create(&food).Error
+	return food, err
 }
 
 // Optimis Transaction
@@ -89,14 +101,3 @@ func (fr *repository) BuyProduct(id int, quantity int) {
 // 	err := r.db.First(&food).Error
 // 	return food, err
 // }
-
-func (r *repository) FindAll() ([]Food, error) {
-	var foods []Food
-	err := r.db.Find(&foods).Error
-	return foods, err
-}
-
-func (r *repository) Create(food Food) (Food, error) {
-	err := r.db.Create(&food).Error
-	return food, err
-}

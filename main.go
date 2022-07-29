@@ -4,24 +4,23 @@ import (
 	"api-ranufrozen/database"
 	"api-ranufrozen/drink"
 	"api-ranufrozen/food"
-	"api-ranufrozen/handler"
 	"fmt"
 )
 
 func main() {
-	// cli()
-	handler.StartRestAPI()
+	cli()
+	// handler.StartRestAPI()
 }
 func cli() {
 	rdb := database.GetRDBConn()
+	rcl := database.GetRedisConn()
 	foodRepository := food.NewRepository(rdb)
-	foodCli := food.NewCli(foodRepository)
-	// foodCli.OptimisTx()
-	// foodCli.PrintProduct(1)
+	foodCli := food.NewCli(foodRepository, rcl)
+	foodCli.PrintProducts()
+}
 
-	foodCli.PrintFindAll()
+func mongoExample() {
 	mongoCon := database.GetMongoConn()
-	// ==== Drink example ======
 	drinkRep := drink.NewDrinkRepo(mongoCon)
 	drinkCli := drink.NewCli(*drinkRep)
 	// 1. Create Drink, many Drink
