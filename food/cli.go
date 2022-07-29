@@ -18,11 +18,6 @@ func (s *cli) Sum(num1, num2 int) int {
 	return 0
 }
 
-func (s *cli) FindAll() ([]Food, error) {
-	foods, err := s.foodRepo.FindAll()
-	return foods, err
-}
-
 func (ser *cli) OptimisTx() {
 	prodId := 1
 	quantity := 4
@@ -32,7 +27,10 @@ func (ser *cli) OptimisTx() {
 }
 
 func (s *cli) PrintFindAll() {
-	foods, err := s.FindAll()
+	foods, err := s.foodRepo.FindAll()
+
+	// use redis client or rdbms
+	// dimana?
 
 	if err != nil {
 		fmt.Println(err)
