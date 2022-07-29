@@ -33,7 +33,7 @@ func (ser *cli) OptimisTx() {
 
 }
 
-func (s *cli) foodsJson() []Food {
+func (s *cli) findAll() []Food {
 	// get foods from redis
 	ctx := context.Background()
 	foodJson, err := s.rcl.Get(ctx, "foods").Bytes()
@@ -82,7 +82,7 @@ func (s *cli) setCache(ctx context.Context, foodArr []Food) {
 }
 
 func (s *cli) PrintProducts() {
-	foods := s.foodsJson()
+	foods := s.findAll()
 	for _, food := range foods {
 		fmt.Println(food.ID, food.Name)
 	}
