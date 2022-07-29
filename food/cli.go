@@ -1,17 +1,24 @@
 package food
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
+	"log"
+	"time"
+
+	"github.com/go-redis/redis/v9"
 )
 
 // struct vs interface?
 // type
 type cli struct {
 	foodRepo Repository
+	rcl      *redis.Client
 }
 
-func NewCli(repo Repository) *cli {
-	return &cli{repo}
+func NewCli(repo Repository, rcl *redis.Client) *cli {
+	return &cli{repo, rcl}
 }
 
 func (s *cli) Sum(num1, num2 int) int {
@@ -26,21 +33,60 @@ func (ser *cli) OptimisTx() {
 
 }
 
-func (s *cli) PrintFindAll() {
-	foods, err := s.foodRepo.FindAll()
+func (s *cli) foodsJson() []Food {
+	// get foods from redis
+	ctx := context.Background()
+	foodJson, err := s.rcl.Get(ctx, "foods").Bytes()
 
-	// use redis client or rdbms
-	// dimana?
-
+	// food json tidak terdapat pada cache
 	if err != nil {
-		fmt.Println(err)
+		foodArr, err := s.foodRepo.FindAll()
+
+		if err != nil {
+			log.Println(err)
+		}
+
+		s.setCache(ctx, foodArr)
+
+		log.Println("from SQL")
+
+		return foodArr
 	}
 
+	foodArr := []Food{}
+	// mapping foods of json to array of foods
+	err = json.Unmarshal(foodJson, &foodArr)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println("from redis")
+	return foodArr
+
+}
+
+func (s *cli) setCache(ctx context.Context, foodArr []Food) {
+	foodJson, err := json.Marshal(foodArr)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	expired := 10 * time.Second
+	err = s.rcl.Set(ctx, "foods", foodJson, expired).Err()
+
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func (s *cli) PrintProducts() {
+	foods := s.foodsJson()
 	for _, food := range foods {
 		fmt.Println(food.ID, food.Name)
 	}
 }
-
 func (ser *cli) PrintProduct(id int) {
 	food := ser.Get(id)
 	fmt.Println(food)

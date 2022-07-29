@@ -14,9 +14,9 @@ func main() {
 func cli() {
 	rdb := database.GetRDBConn()
 	rcl := database.GetRedisConn()
-	foodRepository := food.NewRepository(rdb, rcl)
-	foodCli := food.NewCli(foodRepository)
-	foodCli.PrintFindAll()
+	foodRepository := food.NewRepository(rdb)
+	foodCli := food.NewCli(foodRepository, rcl)
+	foodCli.PrintProducts()
 }
 
 func mongoExample() {

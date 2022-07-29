@@ -15,9 +15,7 @@ func StartRestAPI() {
 	db := database.GetRDBConn()
 
 	foodRepository := food.NewRepository(db)
-	// food = new Food()
-	// food.
-	// foodService := food.NewService(foodRepository)
+
 	foodHandler := NewFoodHandler(foodRepository)
 
 	orderRepository := order.NewRepository(db)

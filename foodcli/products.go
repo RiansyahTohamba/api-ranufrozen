@@ -22,7 +22,9 @@ type JsonResponse struct {
 }
 
 func getProducts() (*JsonResponse, error) {
-
+	// redis tidak cocok disimpan di repository
+	// karena redis sudah menyimpan dalam bentuk JSON response
+	// repository hanya return array of data
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
