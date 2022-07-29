@@ -21,32 +21,34 @@ func NewCli(repo Repository, rcl *redis.Client) *cli {
 	return &cli{repo, rcl}
 }
 
-func (s *cli) Sum(num1, num2 int) int {
+func (cl *cli) Sum(num1, num2 int) int {
 	return 0
 }
 
-func (ser *cli) OptimisTx() {
+func (cl *cli) OptimisTx() {
 	prodId := 1
 	quantity := 4
 	fmt.Printf("Beli Produk sebanyak %d \n", quantity)
-	ser.foodRepo.BuyProduct(prodId, quantity)
+	cl.foodRepo.BuyProduct(prodId, quantity)
 
 }
 
-func (s *cli) findAll() []Food {
+func (cl *cli) findAll() []Food {
 	// get foods from redis
 	ctx := context.Background()
-	foodJson, err := s.rcl.Get(ctx, "foods").Bytes()
+	foodJson, err := cl.rcl.Get(ctx, "foods").Bytes()
 
 	// food json tidak terdapat pada cache
 	if err != nil {
-		foodArr, err := s.foodRepo.FindAll()
+		offset := 5
+		limit := 8
+		foodArr, err := cl.foodRepo.FindAll(offset, limit)
 
 		if err != nil {
 			log.Println(err)
 		}
 
-		s.setCache(ctx, foodArr)
+		cl.setCache(ctx, foodArr)
 
 		log.Println("from SQL")
 
@@ -66,7 +68,7 @@ func (s *cli) findAll() []Food {
 
 }
 
-func (s *cli) setCache(ctx context.Context, foodArr []Food) {
+func (cl *cli) setCache(ctx context.Context, foodArr []Food) {
 	foodJson, err := json.Marshal(foodArr)
 
 	if err != nil {
@@ -74,48 +76,41 @@ func (s *cli) setCache(ctx context.Context, foodArr []Food) {
 	}
 
 	expired := 10 * time.Second
-	err = s.rcl.Set(ctx, "foods", foodJson, expired).Err()
+	err = cl.rcl.Set(ctx, "foods", foodJson, expired).Err()
 
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func (s *cli) PrintProducts() {
-	foods := s.findAll()
+func (cl *cli) PrintFoods() {
+	foods := cl.findAll()
 	for _, food := range foods {
 		fmt.Println(food.ID, food.Name)
 	}
 }
-func (ser *cli) PrintProduct(id int) {
-	food := ser.Get(id)
-	fmt.Println(food)
 
-	fmt.Println("food.Stock terbaru")
+func (cl *cli) PrintFood(id int) {
+	food, err := cl.foodRepo.FindById(id)
+
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	fmt.Println(food.ID, food.Name)
+	fmt.Println("Stock terkini: ")
 	fmt.Println(food.Stock)
-
 }
 
-// func (s *cli) FindById(id int) (Food, error) {
-// 	food, err := s.foodRepo.FindById(id)
-// 	return food, err
-// }
-
-func (s *cli) Create(foodReq FoodRequest) (Food, error) {
+func (cl *cli) Create(foodReq FoodRequest) (Food, error) {
 	price, _ := foodReq.Price.Float64()
 	food := Food{
 		Name:  foodReq.Name,
 		Price: float64(price),
 	}
 	// disini harus ada pengondisian untuk price 'less or equal' dibawah zero
-	newFood, err := s.foodRepo.Create(food)
+	newFood, err := cl.foodRepo.Create(food)
 	return newFood, err
-}
-
-func (ser cli) Get(id int) Food {
-	food := ser.foodRepo.FindById(id)
-	return food
-
 }
 
 // func GetMock(id int) Food {

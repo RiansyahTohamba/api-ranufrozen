@@ -64,15 +64,14 @@ func (handler *foodHandler) Show(c *gin.Context) {
 // base_url/foods?id=12
 func (handler *foodHandler) OrderBy(c *gin.Context) {
 	field := c.Query("field")
-
-	foods, err := handler.foodRepo.FindAll()
+	// page ke 2
+	offset := 5
+	limit := 8
+	foods, err := handler.foodRepo.FindAll(offset, limit)
 
 	if err != nil {
 		fmt.Println(err)
 	}
-	// for _, food := range foods {
-	// 	fmt.Println("food :", food.Name)
-	// }
 
 	c.JSON(http.StatusOK, gin.H{
 		"field": field,

@@ -16,7 +16,9 @@ func cli() {
 	rcl := database.GetRedisConn()
 	foodRepository := food.NewRepository(rdb)
 	foodCli := food.NewCli(foodRepository, rcl)
-	foodCli.PrintProducts()
+	foodCli.PrintFoods()
+	// only one foods
+	foodCli.PrintFood(1)
 }
 
 func mongoExample() {
