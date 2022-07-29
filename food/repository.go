@@ -7,8 +7,8 @@ import (
 )
 
 type Repository interface {
-	FindById(id int) Food
-	FindAll() ([]Food, error)
+	FindById(id int) (Food, error)
+	FindAll(offset, limit int) ([]Food, error)
 	Create(food Food) (Food, error)
 	BuyProduct(id int, quantity int)
 }
@@ -21,16 +21,16 @@ func NewRepository(gorm *gorm.DB) *repository {
 	return &repository{db: gorm}
 }
 
-func (fr *repository) FindById(id int) Food {
+func (fr *repository) FindById(id int) (Food, error) {
 	var food Food
 
-	fr.db.Model(Food{ID: id}).First(&food)
-	return food
+	err := fr.db.Model(Food{ID: id}).First(&food).Error
+	return food, err
 }
 
-func (r *repository) FindAll() ([]Food, error) {
+func (r *repository) FindAll(offset, limit int) ([]Food, error) {
 	var foods []Food
-	err := r.db.Find(&foods).Error
+	err := r.db.Limit(limit).Offset(offset).Find(&foods).Error
 	return foods, err
 }
 
