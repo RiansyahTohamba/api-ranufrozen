@@ -38,8 +38,8 @@ func (s *cli) PrintFindAll() {
 		fmt.Println(err)
 	}
 
-	for _, val := range foods {
-		fmt.Println(val)
+	for _, food := range foods {
+		fmt.Println(food.ID, food.Name)
 	}
 }
 
