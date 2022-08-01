@@ -4,12 +4,13 @@ import (
 	"api-ranufrozen/database"
 	"api-ranufrozen/drink"
 	"api-ranufrozen/food"
+	"api-ranufrozen/handler"
 	"fmt"
 )
 
 func main() {
-	cli()
-	// handler.StartRestAPI()
+	// cli()
+	handler.StartRestAPI()
 }
 func cli() {
 	rdb := database.GetRDBConn()
