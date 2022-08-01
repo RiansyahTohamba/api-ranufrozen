@@ -6,3 +6,12 @@ apakah sudah ada template html nya?
 ini untuk dashboard CS nantinya
 siapa tau ada masalah dengan transaksi
 jadi CS Punya data
+
+// 1 order punya 1 bill
+	// bill: belum tau cara menggunakannya
+	// billRepo := bill.NewRepository(db)
+	// billHandler := NewBillHandler(billRepo)
+
+	// custRepository := customer.NewRepository(db)
+	// custService := customer.NewService(db)
+	// custHandler := customer.NewRepository(db)

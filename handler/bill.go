@@ -5,12 +5,10 @@ import (
 )
 
 type billHandler struct {
-	billService bill.Service
+	billRepo bill.Repository
 }
 
-// function NewFoodHandler bukan punya struct, tapi punya food.handler
-// saat dipanggil jadi seperti ini `foodService := food.NewService(foodRepository)`
-func NewBillHandler(billService bill.Service) *billHandler {
-	return &billHandler{billService}
+func NewBillHandler(billRepo bill.Repository) *billHandler {
+	return &billHandler{billRepo}
 
 }
